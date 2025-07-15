@@ -1,4 +1,5 @@
 from openai import OpenAI
+import streamlit as st
 
 
 from memory.long_term_memory import LongTermMemory
@@ -25,3 +26,5 @@ Answer questions from the student in a short informational way.
 """
 
 system_prompt = create_memory_prompt(ltm) + tutor_system_prompt
+
+st.write("Hello world")
