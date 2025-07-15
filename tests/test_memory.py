@@ -1,3 +1,4 @@
+from memory.long_term_memory import LongTermMemory
 from memory.short_term_memory import ShortTermMemory
 
 
@@ -12,3 +13,18 @@ def test_short_term_memory():
 
     assert len(stm.get_memories()) == 3
     assert stm.get_memories() == [{5: "fish"}, {4: "the"}, {3: "all"}]
+
+
+def test_long_term_memory():
+    stm = ShortTermMemory(memory_limit=3)
+    ltm = LongTermMemory()
+
+    stm.add_memory({"Hello": "world!"})
+    stm.add_memory({"Math": "2 + 2 = 4"})
+
+    ltm.add_short_term_memory(stm)
+
+    key = list(ltm.get_memory().keys())[0]
+    ltm_memory = ltm.get_memory()
+
+    assert ltm_memory[key] == [{"Math": "2 + 2 = 4"}, {"Hello": "world!"}]

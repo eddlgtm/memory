@@ -7,6 +7,9 @@ class ShortTermMemory:
         self.memories = []
         self.memory_limit = memory_limit
 
+    def __repr__(self):
+        return f"{self.memories}"
+
     def add_memory(self, memory):
         if len(self.memories) >= self.memory_limit:
             self.memories.pop()
