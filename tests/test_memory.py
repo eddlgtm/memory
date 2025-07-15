@@ -39,9 +39,7 @@ def test_summarise_memory_option():
     ltm = LongTermMemory()
 
     stm.add_memory({"User_01": "Complained that their Xbox arrived late"})
-    stm.add_memory(
-        {"User_02": "Was thankful that the playstation did not arrive brokens"}
-    )
+    stm.add_memory({"User_02": "Thankful that the playstation did not arrive broken"})
     stm.add_memory({"User_03": "Bought four new games at Christmas"})
     stm.add_memory({"User_02": "Needs a new controller to play with their neighbour"})
 
