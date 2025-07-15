@@ -10,7 +10,7 @@ client = OpenAI()
 stm = ShortTermMemory()
 ltm = LongTermMemory()
 
-tutor_system_prompt = f"""
+tutor_system_prompt = """
 Think step by step.
 
 Role: You are a tutor for a maths student. 
