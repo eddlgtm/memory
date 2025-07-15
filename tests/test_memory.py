@@ -1,3 +1,6 @@
+import pytest
+
+from memory import utils
 from memory.long_term_memory import LongTermMemory
 from memory.short_term_memory import ShortTermMemory
 
@@ -28,3 +31,31 @@ def test_long_term_memory():
     ltm_memory = ltm.get_memory()
 
     assert ltm_memory[key] == [{"Math": "2 + 2 = 4"}, {"Hello": "world!"}]
+
+
+@pytest.mark.integration
+def test_summarise_memory_option():
+    stm = ShortTermMemory()
+    ltm = LongTermMemory()
+
+    stm.add_memory({"User_01": "Complained that their Xbox arrived late"})
+    stm.add_memory(
+        {"User_02": "Was thankful that the playstation did not arrive brokens"}
+    )
+    stm.add_memory({"User_03": "Bought four new games at Christmas"})
+    stm.add_memory({"User_02": "Needs a new controller to play with their neighbour"})
+
+    ltm.add_short_term_memory(stm)
+
+    ltm.summarise()
+
+    judgement = utils.send_message(
+        user_prompt=f"""
+    Does this summary reflect the data acccurately? Return only TRUE if true, else FALSE.
+
+    SUMMARY: {ltm.summary}
+    
+    DATA: {stm.get_memories()}
+    """
+    )
+    assert judgement == "TRUE"

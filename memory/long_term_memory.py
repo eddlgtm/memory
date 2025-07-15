@@ -2,7 +2,12 @@ import json
 from pathlib import Path
 from time import time
 
+from dotenv import load_dotenv
+from openai import OpenAI
+
 from memory.short_term_memory import ShortTermMemory
+
+load_dotenv()
 
 
 class LongTermMemory:
@@ -20,6 +25,7 @@ class LongTermMemory:
             self.memory = {}
 
         self.summary = ""
+        self.client = OpenAI()
 
     def __repr__(self):
         return f"{self.memory}"
@@ -36,7 +42,22 @@ class LongTermMemory:
             f.writelines(json.dumps(self.memory))
 
     def summarise(self):
-        # We need to take all the memories and condense them into a summary
-        # that can be fed to an LLM in its context, maybe with some sort of
-        # prioritisation for recent memories
-        raise NotImplementedError
+        completion = self.client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "system",
+                    "content": """
+                    Role: You are a tool that takes memories in a list and returns a description of these memories to be used by another LLM in its context.
+
+                    Tone:
+                    - Do not respond with specifics about time stamps
+                    - Aggregate the memories into a succinct paragraph
+                    - Do not mention your role in doing this, just return the memory summary
+                    """,
+                },
+                {"role": "user", "content": f"{self.memory}"},
+            ],
+        )
+
+        self.summary = completion.choices[0].message.content
