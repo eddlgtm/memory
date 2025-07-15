@@ -33,15 +33,19 @@ class LongTermMemory:
     def get_memory(self):
         return self.memory
 
-    def add_short_term_memory(self, memory: ShortTermMemory):
-        self.memory[round(time())] = memory.get_memories()
+    def get_summary(self):
+        self._summarise()
+        return self.summary
 
-    def save(self):
+    def add_short_term_memories(self, stm: ShortTermMemory):
+        self.memory[round(time())] = stm.get_memories()
+
+    def _save(self):
         # We can store memory as a json file for now
         with open(file=self.file_path, mode="w") as f:
             f.writelines(json.dumps(self.memory))
 
-    def summarise(self):
+    def _summarise(self):
         completion = self.client.chat.completions.create(
             model="gpt-4o",
             messages=[

@@ -6,6 +6,6 @@ def create_memory_prompt(ltm: LongTermMemory):
 Data from a previous session has been added as Context below. 
 Use this context you consider the next prompt.
 
-Context: {ltm.get_memory()}
+Context: {ltm.summary}
 
 """
